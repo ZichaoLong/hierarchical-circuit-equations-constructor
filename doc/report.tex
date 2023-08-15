@@ -1,0 +1,191 @@
+% !TEX TS-program = xelatex
+% !TEX encoding = UTF-8
+%
+%
+\documentclass[a4paper,12pt]{ctexart}
+\usepackage{geometry,anysize,changepage,calc,hyperref,cite,fancyhdr,setspace}
+\usepackage{amsmath,amssymb,amsthm,listings,xcolor}
+\newtheorem{assumption}{假设}
+
+\colorlet{punct}{red!60!black}
+\definecolor{background}{HTML}{EEEEEE}
+\definecolor{delim}{RGB}{20,105,176}
+\colorlet{numb}{magenta!60!black}
+\lstdefinelanguage{json}{
+    basicstyle=\normalfont\ttfamily,
+    numbers=left,
+    numberstyle=\scriptsize,
+    stepnumber=1,
+    numbersep=8pt,
+    showstringspaces=false,
+    breaklines=true,
+    frame=lines,
+    backgroundcolor=\color{background},
+    literate=
+     *{0}{{{\color{numb}0}}}{1}
+      {1}{{{\color{numb}1}}}{1}
+      {2}{{{\color{numb}2}}}{1}
+      {3}{{{\color{numb}3}}}{1}
+      {4}{{{\color{numb}4}}}{1}
+      {5}{{{\color{numb}5}}}{1}
+      {6}{{{\color{numb}6}}}{1}
+      {7}{{{\color{numb}7}}}{1}
+      {8}{{{\color{numb}8}}}{1}
+      {9}{{{\color{numb}9}}}{1}
+      {:}{{{\color{punct}{:}}}}{1}
+      {,}{{{\color{punct}{,}}}}{1}
+      {\{}{{{\color{delim}{\{}}}}{1}
+      {\}}{{{\color{delim}{\}}}}}{1}
+      {[}{{{\color{delim}{[}}}}{1}
+      {]}{{{\color{delim}{]}}}}{1},
+}
+\renewcommand{\lstlistingname}{代码块}
+\renewcommand{\lstlistlistingname}{\lstlistingname列表}% List of Listings -> List of Algorithms
+\definecolor{capri}{rgb}{0.0, 0.75, 1.0}
+
+
+\usepackage{graphicx,wrapfig,multirow,diagbox,caption,subcaption,enumitem}
+\usepackage{verbatim,algpseudocode}
+\usepackage[boxruled]{algorithm2e}
+\renewcommand{\listalgorithmcfname}{算法列表}
+\renewcommand{\algorithmcfname}{算法}
+\usepackage[numbers,sort,compress]{natbib}
+\usepackage{url,bm,titling,mathrsfs}
+\newcommand{\lookup}{\text{lookup}}
+\newcommand{\net}{\text{net}}
+\newcommand{\device}{\text{device}}
+\newcommand{\enabstractname}{Abstract}
+\newcommand{\cnabstractname}{摘要}
+\newenvironment{enabstract}{
+  \par\small
+  \noindent\mbox{}\hfill{\bfseries \enabstractname}\hfill\mbox{}\par
+  \vskip 2.5ex}{\par\vskip 2.5ex}
+\newenvironment{cnabstract}{
+  \par\small
+  \noindent\mbox{}\hfill{\bfseries \cnabstractname}\hfill\mbox{}\par
+  \vskip 2.5ex}{\par\vskip 2.5ex}
+% \bibliographystyle{abbrvnat}
+% \setcitestyle{open={(},authoryear,close={)}}
+\bibliographystyle{unsrtnat}
+\listfiles
+\input{initialset.tex}
+\linespread{1.5}
+\newcommand\blfootnote[1]{%
+  \begingroup
+  \renewcommand\thefootnote{}\footnote{#1}%
+  \addtocounter{footnote}{-1}%
+  \endgroup
+}
+% \author{\small 龙子超}
+\author{\small 龙子超\ 李琳\ 韩磊\ 孟祥隆\ 丁\hbox{\scalebox{0.6}[1]{羽}\kern-.1em\scalebox{0.4}[1]{\textbf{中}}}俊\ 李瑞艳\ 蒋武\ 丁福臣\ 岳家庆\ 李志超\ 胡贻升\ 李定\ $\text{廖恒}^\star$}
+\setlength{\droptitle}{-10em}
+% 介绍性文章, 报告
+% 面向的读者: 不懂仿真的设计师、开发者、算法人员; 可有较多知识及概念介绍,
+% 参考硕博毕业论文.
+\title{{\heiti {\zihao{3} 层次化电路方程组构建器的计算图表示}}\vspace{-1em}}
+\date{}
+\begin{document}
+\maketitle
+%===================正文====================
+\vspace{-5.7em}
+\begin{cnabstract}
+\begin{spacing}{1.0}
+  % 研究什么问题及目的
+  层次化电路方程组构建技术是连接器件模型、方程组求解器、电路自动设计的中心模块。
+  然而，现有技术在使用中具有一定局限，例如，
+  （1）器件模型特别是电路模块的粗粒化等效模型的开发与复用成本较高;
+  （2）对于参数敏感度分析的支持较复杂低效。
+  % 研究方法 % 避免知识背景介绍，放在引言中
+  受益于自动微分编程及相应软件工具的开放生态，
+  本文提出了一种使用计算图表示的支持动态模块参数的
+  方程组构建器及相应的 JSON 网表，
+  它可简化模型开发且易于快速计算参数到方程组残量的端到端梯度。
+  % 整体思路
+  文中详细讨论了层级电路模块分解与嵌套调用的整体思路---就像函数之于编程语言，
+  并分析了模块内外变量的传递关系及梯度计算规则。
+  % 用例及结论
+  数值用例包括：（1）以“等效电路分解+动态参数”解耦表示的 CMOS 器件模型;
+  （2）运放电路器件尺寸的自动寻优;
+  这两个例子展示了本工作可高效且灵活解耦的支撑仿真、设计，
+  特别是电路模块建模。
+  \\
+  {\bf{关键词}}：层次化电路仿真，SPICE，计算图，电路静态参数，运行时变量，
+  自动微分，电路模型，Mos Sizing
+\blfootnote{$\text{通讯作者}^\star$}
+\end{spacing}
+\end{cnabstract}
+\begin{center}\zihao{3} Computational Graph Representation of Equations System Constructors in Hierarchical Circuit Simulation\end{center}
+\begin{enabstract}
+\begin{spacing}{1.0}
+  Equations system constructors of hierarchical circuits play a central role in
+  device modeling, nonlinear equations solving, and circuit design automation.
+  However, existing constructors present limitations in applications to different
+  extents. For example, the costs of developing and reusing device models ---
+  especially coarse-grained equivalent models of circuit modules ---
+  remain high while parameter sensitivity analysis is complex and inefficient.
+  % method % avoid introducing background
+  Inspired by differentiable programming and
+  leveraging the ecosystem benefits of open-source software, we propose
+  an equations system constructor using the computational graph representation,
+  along with its JSON format netlist, to address these limitations.
+  This representation allows for runtime dependencies between signals and
+  subcircuit/device parameters. The proposed method streamlines the model
+  development process and facilitates end-to-end computation of gradients of
+  equations remainders with respect to parameters.
+  % overall idea
+  This paper discusses in detail the overarching concept of hierarchical
+  subcircuit/device decomposition and nested invocation by drawing parallels to
+  functions in programming languages, and introduces
+  rules for parameters passing and gradient propagation across
+  hierarchical circuit modules.
+  % examples and conclusions
+  The presented numerical examples, including (1) an uncoupled CMOS model
+  representation using "equivalent circuit decomposition+dynamic parameters"
+  and (2) operational amplifier (OpAmp) auto device sizing, have demonstrated
+  that the proposed method supports circuit simulation and design and
+  particularly subcircuit modeling with improved efficiency, simplicity,
+  and decoupling compared to existing techniques.
+  \\
+  {\bf{Keywords}}: hierarchical circuit simulation, SPICE, computational graph,
+  circuit static parameters, runtime variables, automatic differentiation,
+  circuit behavior model, MOS sizing
+\end{spacing}
+\end{enabstract}
+\newpage
+\tableofcontents
+
+\newpage
+\input{sec-intro}
+\section{层次电路方程组构建器：计算图}\label{sec:Joanna}
+\input{sec-Joanna}
+\section{应用示例}\label{sec:applications}
+\input{sec-applications}
+
+\section{结论与展望}
+本文提出把电路的静态参数统一作为仿真运行时变量处理，
+将电路模块/器件的结构与行为信息解耦表达为“等效子电路分解+SubModel动态参数”，
+并由此诱导出以电路模块为基本计算单元的层次电路方程组构建器的计算图表示。
+从文中的两个简单示例可以看到，
+这种方法有助于网表、模型、仿真与优化算法的解耦与灵活交互。
+然而，需注意这种方法带来的问题，例如，
+由于变量梯度将在各级电路中传递，导致对于电路可解性及 DAE-Index 的
+拓扑分析都不再完全适用，需要更通用的层次化的分析理论。
+作为将来工作的一部分，在程序实现上，为具有更好的通用性，
+需支持 BSIM 模型及更多类型的仿真，也可考虑支持其他效应
+例如 S 参数或热效应等; 仿真加速方面，程序本身可有许多改进，
+还可增加对当前 Fast-SPICE 常用技术的支持等。
+
+\section*{致谢}
+\addcontentsline{toc}{section}{致谢}
+感谢图灵的各位同事，希望以后可以共事，共同创造价值。 感谢 EDA 及 HDL 领域的
+各位专家Waisum Wang、樊捷闻、叶佐昌、鲁扬、方尚侠、施国勇、季宇，
+特别是周振亚、庄佳威、王龙、樊玉伟的支持。
+
+
+\addcontentsline{toc}{section}{参考文献}
+\bibliography{ref}
+\input{sec-appendix}
+\end{document}
+
+
+

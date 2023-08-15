@@ -1,0 +1,251 @@
+@article{liu2001mosfet,
+  title={ {MOSFET models for SPICE simulation} },
+  author={Liu, William},
+  journal={Including BSIM3v3 and BSIM4},
+  year={2001},
+  publisher={Wiley-Interscience}
+}
+@Misc{spectremod,
+  author={Cadence},
+  title={ {Simulator Circuit Components and Device Models References} },
+  howpublished={\href{https://community.cadence.com/cadence_technology_forums/f/custom-ic-design/24193/simulator-circuit-components-and-device-models-manual}{在软件文档中查询}}
+}
+@book{sahrling2021analog,
+  title={ {Analog Circuit Simulators for Integrated Circuit Designers: Numerical Recipes in Python} },
+  author={Sahrling, Mikael},
+  year={2021},
+  publisher={Springer Nature}
+}
+@Misc{semiwiki-hierarchical-spice,
+  author={Daniel Payne},
+  publisher={SemiWiki.com},
+  howpublished={\href{https://semiwiki.com/eda/980-what-is-a-hierarchical-spice-circuit-simulator/}{What is a Hierarchical SPICE Circuit Simulator?}},
+  comment={关于层次化仿真的讨论, Eldo Classic, HSPICE or Spectre 都是 flat solver. Hierarchical仿真可较容易支持 dormant cell 及开关 solver.}
+}
+@Misc{semiwiki-multi-mode-simulation,
+  author={Daniel Payne},
+  publisher={SemiWiki.com},
+  howpublished={\href{https://semiwiki.com/eda/cadence/875-multi-mode-simulation-whats-new-at-cadence/}{Multi-Mode Simulation-What's New at Cadence?}},
+  comment={关于 Cadence 的 Multi Mode 仿真的讨论. 不太相关.}
+}
+@Misc{berkeley-SPICE-elements,
+    author={T. Quarles and D. Pederson and R. Newton and A. Sangiovanni-Vincentelli and Christopher Wayne},
+    howpublished={\href{http://bwrcs.eecs.berkeley.edu/Classes/IcBook/SPICE/UserGuide/elements_fr.html}{Berkeley CIRCUIT ELEMENTS AND MODELS}}
+}
+@article{hong2018multivariate,
+  title={ {Multivariate rational regression and its application in semiconductor device modeling} },
+  author={Hong, Yuxi and Ma, Dongsheng and Ye, Zuochang},
+  journal={Journal of Semiconductors},
+  volume={39},
+  number={9},
+  pages={094010},
+  year={2018},
+  publisher={IOP Publishing},
+  comment={没太搞懂, 感觉关系不大}
+}
+@misc{zhu2010parasitic,
+  title={ {Parasitic effects analysis of circuit structures} },
+  author={Zhu, Zhenhai and Phillips, Joel and Ye, Zuo-Chang},
+  year={2010},
+  month=dec # "~14",
+  publisher={Google Patents},
+  note={US Patent 7,853,910},
+  comment={专利, 没太搞懂, 感觉关系不大}
+}
+@article{andrychowicz2016learning,
+  title={ {Learning to learn by gradient descent by gradient descent} },
+  author={Andrychowicz, Marcin and Denil, Misha and Gomez, Sergio and Hoffman, Matthew W and Pfau, David and Schaul, Tom and Shillingford, Brendan and De Freitas, Nando},
+  journal={Advances in neural information processing systems},
+  volume={29},
+  year={2016}
+}
+@article{chen2021learning,
+  title={ {Learning to optimize: A primer and a benchmark} },
+  author={Chen, Tianlong and Chen, Xiaohan and Chen, Wuyang and Heaton, Howard and Liu, Jialin and Wang, Zhangyang and Yin, Wotao},
+  journal={arXiv preprint arXiv:2103.12828},
+  year={2021}
+}
+@Misc{modelingtoolkit-jl,
+  author={George Gkountouras},
+  howpublished={\href{https://live.juliacon.org/talk/9EM3P7}{Exploring audio circuits with ModelingToolkit.jl}},
+  comment={主要不是考虑通用仿真及反问题.里面给出了基于spice,mathematica,matlab建模的比较}
+}
+@Misc{cider-simulator,
+  howpublished={\href{https://ptolemy.berkeley.edu/projects/embedded/pubs/downloads/cider/}{Cider: A mixed-level circuit and device simulator}},
+  comment={如同一般的仿真器提供的敏感性分析功能, 基于Spice网表.}
+}
+@article{engel2020ddsp,
+  title={ {DDSP: Differentiable digital signal processing} },
+  author={Engel, Jesse and Hantrakul, Lamtharn and Gu, Chenjie and Roberts, Adam},
+  journal={arXiv preprint arXiv:2001.04643},
+  year={2020},
+  comment={ModelingToolkit引用, 仅作为可微分数字信号处理工具}
+}
+@inproceedings{esqueda2021differentiable,
+  title={ {Differentiable White-Box Virtual Analog Modeling} },
+  author={Esqueda, Fabi{\'a}n and Kuznetsov, Boris and Parker, Julian D},
+  booktitle={2021 24th International Conference on Digital Audio Effects (DAFx)},
+  pages={41--48},
+  year={2021},
+  organization={IEEE},
+  comment={基于微分工具做反问题, 主要不是考虑通用仿真器. 代码链接失效.}
+}
+@inproceedings{ye2014sparsity,
+  title={ {Sparsity-aware model reduction for post-layout circuit simulation} },
+  author={Ye, Zuochang},
+  booktitle={2014 IEEE International Conference on Electron Devices and Solid-State Circuits},
+  pages={1--2},
+  year={2014},
+  organization={IEEE},
+  comment={关系不大}
+}
+@book{li2011simulation,
+  title={ {Simulation and verification of electronic and biological systems} },
+  author={Li, Peng and Silveira, Lu{\'\i}s Miguel and Feldmann, Peter},
+  year={2011},
+  publisher={Springer Science \& Business Media},
+  comment={rewienski2011perspective 的原书}
+}
+@Misc{mlir-llvm,
+  howpublished={\href{https://mlir.llvm.org/}{MLIR}},
+  comment={MLIR: 可能可以供电路层次仿真参考}
+}
+@article{houben2004circuits,
+  title={ {Circuits in motion: The numerical simulation of electrical oscillators.} },
+  author={Houben, Stephan Hendrik Marie Jozef},
+  year={2004},
+  comment={包含 DAE-Index 分析结论. 书总体内容尺度跨越较大.}
+}
+@incollection{rewienski2011perspective,
+  title={ {A perspective on fast-SPICE simulation technology} },
+  author={Rewie{\'n}ski, Micha{\l}},
+  booktitle={Simulation and Verification of Electronic and Biological Systems},
+  pages={23--42},
+  year={2011},
+  publisher={Springer},
+  comment={一些 fast spice 加速技术. 暂不支持多级梯度传递. 但关注点也并非在此, 基于多级梯度传递的大粒度建模, 需解决精度问题才能应用于大规模电路仿真.}
+}
+@inproceedings{fedder1998nodas,
+  title={ {NODAS 1.3-Nodal Design of Actuators and Sensors} },
+  author={Fedder, Gary K and Jing, Qi},
+  booktitle={IEEE/VIUF Workshop on Behavioral Modeling and Simulation (BMAS)},
+  year={1998},
+  comment={早期的层次仿真}
+}
+@article{vandemeer1998hierarchical,
+  title={ {Hierarchical representation and simulation of micromachined inertial sensors} },
+  author={Vandemeer, Jan E and Kranz, Michael S and Fedder, Gary K},
+  year={1998},
+  publisher={Carnegie Mellon University},
+  comment={早期的层次仿真}
+}
+@inproceedings{zhou1998nodal,
+  title={ {Nodal analysis for MEMS design using SUGAR v0. 5} },
+  author={Zhou, Ningning and Clark, Jason Vaughn and Pister, KSJ},
+  booktitle={Technical Proceedings of the 1998 Intl. Conf. on Modeling and Simulation of Microsystems},
+  pages={308--313},
+  year={1998},
+  organization={Citeseer},
+  comment={早期的层次仿真}
+}
+
+@book{fitzpatrick1998analog,
+  title={ {Analog behavioral modeling with the Verilog-A language} },
+  author={FitzPatrick, Dan and Miller, Ira},
+  year={1998},
+  publisher={Springer Science \& Business Media},
+  comment={行为模型支持, 未处理电路层次间信号与参数的非线性关系.}
+}
+@phdthesis{smith2021data,
+  title={ {Data Driven Surrogate Models for Faster SPICE Simulation of Power Supply Circuits} },
+  author={Smith, Tanya N},
+  year={2021},
+  school={Massachusetts Institute of Technology},
+  comment={暂时仅考虑了器件模型用神经网络代替, 着重讨论了 adaptive sampling.}
+}
+@article{li2016physics,
+  title={ {Physics-inspired neural networks for efficient device compact modeling} },
+  author={Li, Mingda and {\.I}rsoy, Ozan and Cardie, Claire and Xing, Huili Grace},
+  journal={IEEE Journal on Exploratory Solid-State Computational Devices and Circuits},
+  volume={2},
+  pages={44--49},
+  year={2016},
+  publisher={IEEE},
+  comment={用神经网络逼近集约模型, 并引入更多的物理信息.}
+}
+@article{liu2018survey,
+  title={ {A survey of adaptive sampling for global metamodeling in support of simulation-based complex engineering design} },
+  author={Liu, Haitao and Ong, Yew-Soon and Cai, Jianfei},
+  journal={Structural and Multidisciplinary Optimization},
+  volume={57},
+  number={1},
+  pages={393--416},
+  year={2018},
+  publisher={Springer},
+  comment={metamodeling概念.在smith2021data中引用了此文.known as metamodels,response surfaces,model of the model}
+}
+@inproceedings{chen2017verilog,
+  title={ {Verilog-A compatible recurrent neural network model for transient circuit simulation} },
+  author={Chen, Zaichen and Raginsky, Maxim and Rosenbaum, Elyse},
+  booktitle={2017 IEEE 26th Conference on Electrical Performance of Electronic Packaging and Systems (EPEPS)},
+  pages={1--3},
+  year={2017},
+  organization={IEEE},
+  comment={用RNN学习一个 active rail clamp circuit(包含6个transistors,2个无源器件) 并最终用 Verilog-A 实现.}
+}
+@article{zheng2012implementing,
+  title={ {Implementing and evaluating a simplified transistor model for timing analysis of integrated circuits} },
+  author={Zheng, XY},
+  year={2012},
+  comment={可作为下游建模客户}
+}
+@article{synopsys2013hspice,
+  title={ {HSPICE{\textregistered} User Guide: Basic Simulation and Analysis, Version H-2013.03} },
+  author={Synopsys},
+  year={2013},
+  comment={HSPICE 说明书, 未考虑参数传递, 可支持比如 lookup table diode.}
+}
+@article{rutenbar2007hierarchical,
+  title={ {Hierarchical modeling, optimization, and synthesis for system-level analog and RF designs} },
+  author={Rutenbar, Rob A and Gielen, Georges GE and Roychowdhury, Jaijeet},
+  journal={Proceedings of the IEEE},
+  volume={95},
+  number={3},
+  pages={640--669},
+  year={2007},
+  publisher={IEEE},
+  comment={讲了分层建模和基于优化的自动设计. 前者是客户, 后者是黑盒优化也是客户.}
+}
+@article{stevanovic2009quadratic,
+  title={ {Quadratic backward propagation of variance for nonlinear statistical circuit modeling} },
+  author={Stevanovic, Ivica and McAndrew, Colin C},
+  journal={IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems},
+  volume={28},
+  number={9},
+  pages={1428--1432},
+  year={2009},
+  publisher={IEEE},
+  comment={用 sensitivity 作 yield estimation(产出估计), 仅关注模型参数可用.}
+}
+@inproceedings{gu2008faster,
+  title={ {Faster statistical cell characterization using adjoint sensitivity analysis} },
+  author={Gu, Ben and Gullapalli, Kiran and Zhang, Yun and Sundareswaran, Savithri},
+  booktitle={2008 IEEE Custom Integrated Circuits Conference},
+  pages={229--232},
+  year={2008},
+  organization={IEEE},
+  comment={借助用 sensitivity 作统计分析, 仅关注模型参数, 现代设计变量不耦合.}
+}
+@article{Zygote.jl-2018,
+  author    = {Michael Innes},
+  title     = { {Don't Unroll Adjoint: Differentiating SSA-Form Programs} },
+  journal   = {CoRR},
+  volume    = {abs/1810.07951},
+  year      = {2018},
+  url       = {http://arxiv.org/abs/1810.07951},
+  archivePrefix = {arXiv},
+  eprint    = {1810.07951},
+  timestamp = {Tue, 30 Oct 2018 20:39:56 +0100},
+  biburl    = {https://dblp.org/rec/bib/journals/corr/abs-1810-07951},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}

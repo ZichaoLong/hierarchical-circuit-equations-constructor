@@ -1,0 +1,149 @@
+% !TEX TS-program = xelatex
+% !TEX encoding = UTF-8
+%
+%
+\documentclass[a4paper,12pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{geometry,anysize,changepage,calc,hyperref,cite,fancyhdr,setspace}
+\usepackage{amsmath,amssymb,amsthm,listings,xcolor}
+\newtheorem{assumption}{Assumption}
+
+\colorlet{punct}{red!60!black}
+\definecolor{background}{HTML}{EEEEEE}
+\definecolor{delim}{RGB}{20,105,176}
+\colorlet{numb}{magenta!60!black}
+\lstdefinelanguage{json}{
+    basicstyle=\normalfont\ttfamily,
+    numbers=left,
+    numberstyle=\scriptsize,
+    stepnumber=1,
+    numbersep=8pt,
+    showstringspaces=false,
+    breaklines=true,
+    frame=lines,
+    backgroundcolor=\color{background},
+    literate=
+     *{0}{{{\color{numb}0}}}{1}
+      {1}{{{\color{numb}1}}}{1}
+      {2}{{{\color{numb}2}}}{1}
+      {3}{{{\color{numb}3}}}{1}
+      {4}{{{\color{numb}4}}}{1}
+      {5}{{{\color{numb}5}}}{1}
+      {6}{{{\color{numb}6}}}{1}
+      {7}{{{\color{numb}7}}}{1}
+      {8}{{{\color{numb}8}}}{1}
+      {9}{{{\color{numb}9}}}{1}
+      {:}{{{\color{punct}{:}}}}{1}
+      {,}{{{\color{punct}{,}}}}{1}
+      {\{}{{{\color{delim}{\{}}}}{1}
+      {\}}{{{\color{delim}{\}}}}}{1}
+      {[}{{{\color{delim}{[}}}}{1}
+      {]}{{{\color{delim}{]}}}}{1},
+}
+\renewcommand{\lstlistingname}{Code}
+\renewcommand{\lstlistlistingname}{\lstlistingname List}% List of Listings -> List of Algorithms
+\definecolor{capri}{rgb}{0.0, 0.75, 1.0}
+
+
+\usepackage{graphicx,wrapfig,multirow,diagbox,caption,subcaption,enumitem}
+\usepackage{verbatim,algpseudocode}
+\usepackage[boxruled]{algorithm2e}
+\renewcommand{\listalgorithmcfname}{Algorithm List}
+\renewcommand{\algorithmcfname}{Algorithm}
+\usepackage[numbers,sort,compress]{natbib}
+\usepackage{url,bm,titling,mathrsfs}
+\newcommand{\lookup}{\text{lookup}}
+\newcommand{\net}{\text{net}}
+\newcommand{\device}{\text{device}}
+\newcommand{\enabstractname}{Abstract}
+\newcommand{\cnabstractname}{Abstract}
+\newenvironment{enabstract}{
+  \par\small
+  \noindent\mbox{}\hfill{\bfseries \enabstractname}\hfill\mbox{}\par
+  \vskip 2.5ex}{\par\vskip 2.5ex}
+\newenvironment{cnabstract}{
+  \par\small
+  \noindent\mbox{}\hfill{\bfseries \cnabstractname}\hfill\mbox{}\par
+  \vskip 2.5ex}{\par\vskip 2.5ex}
+% \bibliographystyle{abbrvnat}
+% \setcitestyle{open={(},authoryear,close={)}}
+\bibliographystyle{unsrtnat}
+\listfiles
+\input{initialset.tex}
+\linespread{1.5}
+\newcommand\blfootnote[1]{%
+  \begingroup
+  \renewcommand\thefootnote{}\footnote{#1}%
+  \addtocounter{footnote}{-1}%
+  \endgroup
+}
+% \author{Zichao Long}
+\author{Zichao Long, Lin Li, Lei Han, Xianglong Meng, Chongjun Ding,\\
+Ruiyan Li, Wu Jiang, Fuchen Ding, Jiaqing Yue, Zhichao Li,\\
+Yisheng Hu, Ding Li, $\text{Heng Liao}^\star$}
+\setlength{\droptitle}{-10em}
+\title{Computational Graph Representation of Equations System Constructors in Hierarchical Circuit Simulation}
+\date{}
+\begin{document}
+\maketitle
+\vspace{-5.7em}
+\begin{abstract}
+  Equations system constructors of hierarchical circuits play a central role in
+  device modeling, nonlinear equations solving, and circuit design automation.
+  However, existing constructors present limitations in applications to different
+  extents. For example, the costs of developing and reusing device models ---
+  especially coarse-grained equivalent models of circuit modules ---
+  remain high while parameter sensitivity analysis is complex and inefficient.
+  % method % avoid introducing background
+  Inspired by differentiable programming and
+  leveraging the ecosystem benefits of open-source software, we propose
+  an equations system constructor using the computational graph representation,
+  along with its JSON format netlist, to address these limitations.
+  This representation allows for runtime dependencies between signals and
+  subcircuit/device parameters. The proposed method streamlines the model
+  development process and facilitates end-to-end computation of gradients of
+  equations remainders with respect to parameters.
+  % overall idea
+  This paper discusses in detail the overarching concept of hierarchical
+  subcircuit/device decomposition and nested invocation by drawing parallels to
+  functions in programming languages, and introduces
+  rules for parameters passing and gradient propagation across
+  hierarchical circuit modules.
+  % examples and conclusions
+  The presented numerical examples, including (1) an uncoupled CMOS model
+  representation using "equivalent circuit decomposition+dynamic parameters"
+  and (2) operational amplifier (OpAmp) auto device sizing, have demonstrated
+  that the proposed method supports circuit simulation and design and
+  particularly subcircuit modeling with improved efficiency, simplicity,
+  and decoupling compared to existing techniques.
+  \\
+  {\bf{Keywords}}: hierarchical circuit simulation, SPICE, computational graph,
+  circuit static parameters, runtime variables, automatic differentiation,
+  circuit behavior model, MOS sizing
+\blfootnote{$\text{Corresponding author}^\star$}
+\end{abstract}
+
+\newpage
+\tableofcontents
+
+\newpage
+\input{sec-intro}
+\section[Hierarchical Circuit Equations System Constructor: Computational Graph]{Hierarchical Circuit Equations System Constructor: \\ Computational Graph}\label{sec:Joanna}
+\input{sec-Joanna}
+\section{Applications}\label{sec:applications}
+\input{sec-applications}
+
+\section{Conclusion}
+In this paper, the static parameters of the circuit are processed as runtime variables in simulation, and the structural information and behavioral information of the circuit module/device are decoupled as "equivalent subcircuit decomposition + submodel-computed dynamic parameters". These further derive the computational graph representation of the equations system constructor for hierarchical circuits with circuit modules as the compute units of the computational graph. According to the two simple examples, this approach facilitates the decoupling and flexible interaction between netlists, models, and simulation and optimization algorithms. However, some problems exist with this approach. For example, because the variable gradient will be passed across the layers of a circuit, the topology analysis for circuit equations solvability and DAE-Index no longer works, requiring a more general hierarchical analysis theory. In the future, this approach will gain better generalization by supporting BSIM and more simulation types with more effects (i.e., S parameter or thermal effect) considered. Faster simulation is also possible if the program itself is optimized and the support for fast-SPICE technology is added.
+
+\section*{Acknowledgment}
+\addcontentsline{toc}{section}{Acknowledgment}
+I would like to thank my colleagues at Turing Department. It's been both a pleasure and an honor to work with them. This work has been also supported by many EDA and HDL experts, including Waisum Wang, Jiewen Fan, Zuochang Ye, Yang Lu, Shangxia Fang, Guoyong Shi, and Yu Ji. Special thanks go to Zhenya Zhou, Jiawei Zhuang, Long Wang, and Yuwei Fan for their kind help.
+
+\addcontentsline{toc}{section}{References}
+\bibliography{ref}
+\input{sec-appendix}
+\end{document}
+
+
+

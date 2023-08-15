@@ -1,0 +1,154 @@
+\section*{Appendix}
+\addcontentsline{toc}{section}{Appendix}
+\renewcommand\thesubsection{\Alph{subsection}}
+\subsection{TRAN Analysis Induced AC Analysis Equation}\label{appendix:TRAN-to-AC-equation}
+To solve the transient equation \ref{eq:flat-equation} and the DC steady-state equation $\bm{F}(\bm{x}, \bm{p})=\bm{0}$,
+the Newton-Raphson method calculates $\bm{Q},\bm{F}\in\mr^N$ and the Jacobian matrix $\nabla_{\bm{x}}\bm{Q},\nabla_{\bm{x}}\bm{F}\in\mr^{N\times N}$ repeatedly.
+In AC small-signal analysis, consider applying perturbation $\delta\bm{x},\delta\bm{p}$ around the steady-state solution $\bm{x},\bm{p}$ and linearizing \ref{eq:flat-equation} as follows:
+
+\[
+\nabla_{\bm{x}}\bm{Q}\cdot\dot{\delta}\bm{x}
++\nabla_{\bm{p}}\bm{Q}\cdot\dot{\delta}\bm{p}
++\nabla_{\bm{x}}\bm{F}\cdot\delta\bm{x}
++\nabla_{\bm{p}}\bm{F}\cdot\delta\bm{p}=\bm{0}
+\]
+Let $\delta\bm{x},\delta\bm{p}$ be a small signal with an angular frequency of $\omega$: 
+$\delta\bm{x}=\bm{\epsilon}_{\bm{x}}\cdot e^{i\omega t},\delta\bm{p}=\bm{\epsilon}_{\bm{p}}\cdot e^{i\omega t}$.
+Then the system of linear equations of AC small-signal analysis is
+\begin{equation}\label{eq:flat-ac-equation}
+(i\omega\cdot\nabla_{\bm{x}}\bm{Q}+\nabla_{\bm{x}}\bm{F})\cdot\bm{\epsilon}_{\bm{x}}
+= (i\omega\cdot\nabla_{\bm{p}}\bm{Q}+\nabla_{\bm{p}}\bm{F})\cdot\bm{\epsilon}_{\bm{p}}
+\end{equation}
+
+\subsection{CMOS Subcircuit}\label{appendix:mos-subckt}
+\begin{lstlisting}[language=json,numbers=none,
+caption={CMOS subcircuit},label=lst:mos-subckt]
+"NMOSTYPE":{
+  "ExternalNodes":["gate","source","drain","bulk"],
+  "InputParams":["MosL","MosW"],
+  "InternalNodes":[],
+  "SubModel":{
+    "Analysis":["DC","TRAN"],
+    "ModelLoader":"SimInfo->lut.MosLookup(\"NMOSTYPE\",
+      /path/to/data; SimInfo=SimInfo)",
+    "IntrinsicParams":
+      ["ID","GDS","CDD","CSS","CGG","CGS","CGD","GM","GMB"]
+  },
+  "Schematic":{
+    "ids":{
+      "MasterName":"ICS",
+      "ExternalNodes":{"input":"source","output":"drain"},
+      "InputParams":{"dc":"ID","ac":0}
+    },
+    "template":{
+      "MasterName":"MosSmallSignalTemplate",
+      "ExternalNodes":{
+        "gate":"gate","source":"source",
+        "drain":"drain","bulk":"bulk"
+      },
+      "InputParams":{
+        "GDS":"GDS","CDD":"CDD","CSS":"CSS","CGG":"CGG",
+        "CGS":"CGS","CGD":"CGD","GM":"GM","GMB":"GMB"
+      }
+    }
+  }
+}
+\end{lstlisting}
+\begin{lstlisting}[language=json,numbers=none,
+caption={MosSmallSignalTemplate: Small signal equivalent circuit decomposition},label=lst:mos-small-signal-subckt]
+"MosSmallSignalTemplate":{
+  "ExternalNodes":["gate","source","drain","bulk"],
+  "InputParams":["GDS","CDD","CSS","CGG","CGS","CGD","GM","GMB"],
+  "InternalNodes":[],
+  "Schematic":{
+    "infr":{
+      "MasterName":"resistor",
+      "ExternalNodes":{"left":"drain","right":"source"},
+      "InputParams":{"resistance":1e1000}
+    },
+    "gds":{
+      "MasterName":"ACVCCS",
+      "ExternalNodes":{"left":"drain","right":"source","input":"drain","output":"source"},
+      "InputParams":{"MF":"GDS"}
+    },
+    "cdd":{
+      "MasterName":"capacitor",
+      "ExternalNodes":{"input":"drain","output":"bulk"},
+      "InputParams":{"capacitance":"CDD"}
+    },
+    "css":{
+      "MasterName":"capacitor",
+      "ExternalNodes":{"input":"source","output":"bulk"},
+      "InputParams":{"capacitance":"CSS"}
+    },
+    "cgg":{
+      "MasterName":"capacitor",
+      "ExternalNodes":{"input":"gate","output":"bulk"},
+      "InputParams":{"capacitance":"CGG"}
+    },
+    "cgs":{
+      "MasterName":"capacitor",
+      "ExternalNodes":{"input":"gate","output":"source"},
+      "InputParams":{"capacitance":"CGS"}
+    },
+    "cgd":{
+      "MasterName":"capacitor",
+      "ExternalNodes":{"input":"gate","output":"drain"},
+      "InputParams":{"capacitance":"CGD"}
+    },
+    "gm":{
+      "MasterName":"ACVCCS",
+      "ExternalNodes":{
+        "left":"gate","right":"source","input":"drain","output":"source"
+      },
+      "InputParams":{"MF":"GM"}
+    },
+    "gmb":{
+      "MasterName":"ACVCCS",
+      "ExternalNodes":{
+        "left":"bulk","right":"source","input":"drain","output":"source"
+      },
+      "InputParams":{"MF":"GMB"}
+    }
+  }
+}
+\end{lstlisting}
+
+\subsection{Gradient Backpropagation of the Solution of a Linear Equations System}\label{appendix:inv-linear-equation-grad}
+Consider a system of real linear equations $\bm{A}(\bm{x})\bm{v}=\bm{b}(\bm{x})$ with respect to $\bm{v}$,
+where $\bm{A},\bm{b}$ are nonlinearly dependent on $\bm{x}$ being a sparse matrix/vector, and
+$\nabla_{\bm{x}}\bm{A},\nabla_{\bm{x}}\bm{b}$
+are computable, then $\bm{v}$ will also be nonlinearly dependent on $\bm{x}$. Differentiating the system of equations yields:
+\[
+(\bm{A}+\nabla_{\bm{x}}\bm{A}\cdot\ud\bm{x})\cdot
+(\bm{v}+\nabla_{\bm{x}}\bm{v}\cdot\ud\bm{x})
+=\bm{b}+\nabla_{\bm{x}}\bm{b}\cdot\ud\bm{x}
+\]
+When the zeroth and second order terms are dropped, the following equation holds for any $\ud\bm{x}$
+\begin{equation}\label{eq:inv-full-differentiation}
+\nabla_{\bm{x}}\bm{A}\cdot\ud\bm{x}\cdot\bm{v}
++\bm{A}\cdot\nabla_{\bm{x}}\bm{v}\cdot\ud\bm{x}
+=\nabla_{\bm{x}}\bm{b}\cdot\ud\bm{x},
+\end{equation}
+Assume a loss function $l(\bm{v})$, whose gradient $\nabla_{\bm{v}}l$ can be calculated.
+Backpropagating the gradient to $\bm{x}$ is equivalent to finding the solution of
+$\nabla_{\bm{x}}l=\nabla_{\bm{v}}l\cdot\nabla_{\bm{x}}\bm{v}$.
+In fact, we do not need to actually calculate $\nabla_{\bm{x}}\bm{v}$ and store the data, which can be rather dense.
+According to Equation \ref{eq:inv-full-differentiation}, we have
+\[
+\begin{split}
+& \nabla_{\bm{x}}\bm{v}\cdot\ud\bm{x}
+= \bm{A}^{-1}\cdot\big(\nabla_{\bm{x}}\bm{b}\cdot\ud\bm{x}-
+\nabla_{\bm{x}}\bm{A}\cdot\ud\bm{x}\cdot\bm{v}\big),\forall \ud\bm{x}, \\
+\Rightarrow
+& \nabla_{\bm{v}}l\cdot\nabla_{\bm{x}}\bm{v}\cdot\ud\bm{x}
+= (\nabla_{\bm{v}}l\cdot\bm{A}^{-1})\cdot\big(\nabla_{\bm{x}}\bm{b}\cdot\ud\bm{x}-
+\nabla_{\bm{x}}\bm{A}\cdot\ud\bm{x}\cdot\bm{v}\big),\forall \ud\bm{x}, \\
+\end{split}
+\]
+Therefore, in order to calculate $\nabla_{\bm{v}}l\cdot\nabla_{\bm{x}}\bm{v}$,
+we only need to solve the sparse matrix linear equations system $\nabla_{\bm{v}}l\cdot\bm{A}^{-1}$ once in advance,
+element-wisely set the values of $\ud\bm{x}$ to 1 and the rest to 0. Then, we obtain
+$\nabla_{\bm{x}}l=\nabla_{\bm{v}}l\cdot\nabla_{\bm{x}}\bm{v}$.
+
+For the case of a set of complex linear equations, a similar discussion can also be carried out using the Wirtinger derivative.

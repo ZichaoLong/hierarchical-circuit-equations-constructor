@@ -1,0 +1,155 @@
+\section*{附录}
+\addcontentsline{toc}{section}{附录}
+\renewcommand\thesubsection{\Alph{subsection}}
+\subsection{TRAN 分析诱导 AC 分析方程}\label{appendix:TRAN-to-AC-equation}
+求解瞬态方程 \ref{eq:flat-equation} 及直流稳态方程 $\bm{F}(\bm{x},\bm{p})=\bm{0}$ 时，
+Newton–Raphson 方法需反复计算方程余项 $\bm{Q},\bm{F}\in\mr^N$ 及 Jacobian 矩阵
+$\nabla_{\bm{x}}\bm{Q},\nabla_{\bm{x}}\bm{F}\in\mr^{N\times N}$。
+对交流小信号分析而言，考虑在稳态解附近对 $\bm{x},\bm{p}$ 作扰动
+$\delta\bm{x},\delta\bm{p}$ 并线性化 \ref{eq:flat-equation} 得到
+\[
+  \nabla_{\bm{x}}\bm{Q}\cdot\dot{\delta}\bm{x}
+  +\nabla_{\bm{p}}\bm{Q}\cdot\dot{\delta}\bm{p}
+  +\nabla_{\bm{x}}\bm{F}\cdot\delta\bm{x}
+  +\nabla_{\bm{p}}\bm{F}\cdot\delta\bm{p}=\bm{0}
+\]
+若假设$\delta\bm{x},\delta\bm{p}$是角频率为 $\omega$ 的小信号
+$\bm{\epsilon}_{\bm{x}}\cdot e^{i\omega t},\bm{\epsilon}_{\bm{p}}\cdot e^{i\omega t}$，
+则得到交流小信号分析的线性方程组
+\begin{equation}\label{eq:flat-ac-equation}
+  (i\omega\cdot\nabla_{\bm{x}}\bm{Q}+\nabla_{\bm{x}}\bm{F})\cdot\bm{\epsilon}_{\bm{x}}
+  = (i\omega\cdot\nabla_{\bm{p}}\bm{Q}+\nabla_{\bm{p}}\bm{F})\cdot\bm{\epsilon}_{\bm{p}}
+\end{equation}
+
+\subsection{CMOS 子电路}\label{appendix:mos-subckt}
+\begin{lstlisting}[language=json,numbers=none,
+caption={CMOS 子电路},label=lst:mos-subckt]
+"NMOSTYPE":{
+  "ExternalNodes":["gate","source","drain","bulk"],
+  "InputParams":["MosL","MosW"],
+  "InternalNodes":[],
+  "SubModel":{
+    "Analysis":["DC","TRAN"],
+    "ModelLoader":"SimInfo->lut.MosLookup(\"NMOSTYPE\",
+      /path/to/data; SimInfo=SimInfo)",
+    "IntrinsicParams":
+      ["ID","GDS","CDD","CSS","CGG","CGS","CGD","GM","GMB"]
+  },
+  "Schematic":{
+    "ids":{
+      "MasterName":"ICS",
+      "ExternalNodes":{"input":"source","output":"drain"},
+      "InputParams":{"dc":"ID","ac":0}
+    },
+    "template":{
+      "MasterName":"MosSmallSignalTemplate",
+      "ExternalNodes":{
+        "gate":"gate","source":"source",
+        "drain":"drain","bulk":"bulk"
+      },
+      "InputParams":{
+        "GDS":"GDS","CDD":"CDD","CSS":"CSS","CGG":"CGG",
+        "CGS":"CGS","CGD":"CGD","GM":"GM","GMB":"GMB"
+      }
+    }
+  }
+}
+\end{lstlisting}
+\begin{lstlisting}[language=json,numbers=none,
+caption={MosSmallSignalTemplate：小信号等效电路分解},label=lst:mos-small-signal-subckt]
+"MosSmallSignalTemplate":{
+    "ExternalNodes":["gate","source","drain","bulk"],
+    "InputParams":["GDS","CDD","CSS","CGG","CGS","CGD","GM","GMB"],
+    "InternalNodes":[],
+    "Schematic":{
+        "infr":{
+            "MasterName":"resistor",
+            "ExternalNodes":{"left":"drain","right":"source"},
+            "InputParams":{"resistance":1e1000}
+        },
+        "gds":{
+            "MasterName":"ACVCCS",
+            "ExternalNodes":{"left":"drain","right":"source","input":"drain","output":"source"},
+            "InputParams":{"MF":"GDS"}
+        },
+        "cdd":{
+            "MasterName":"capacitor",
+            "ExternalNodes":{"input":"drain","output":"bulk"},
+            "InputParams":{"capacitance":"CDD"}
+        },
+        "css":{
+            "MasterName":"capacitor",
+            "ExternalNodes":{"input":"source","output":"bulk"},
+            "InputParams":{"capacitance":"CSS"}
+        },
+        "cgg":{
+            "MasterName":"capacitor",
+            "ExternalNodes":{"input":"gate","output":"bulk"},
+            "InputParams":{"capacitance":"CGG"}
+        },
+        "cgs":{
+            "MasterName":"capacitor",
+            "ExternalNodes":{"input":"gate","output":"source"},
+            "InputParams":{"capacitance":"CGS"}
+        },
+        "cgd":{
+            "MasterName":"capacitor",
+            "ExternalNodes":{"input":"gate","output":"drain"},
+            "InputParams":{"capacitance":"CGD"}
+        },
+        "gm":{
+            "MasterName":"ACVCCS",
+            "ExternalNodes":{
+                "left":"gate","right":"source","input":"drain","output":"source"
+            },
+            "InputParams":{"MF":"GM"}
+        },
+        "gmb":{
+            "MasterName":"ACVCCS",
+            "ExternalNodes":{
+                "left":"bulk","right":"source","input":"drain","output":"source"
+            },
+            "InputParams":{"MF":"GMB"}
+        }
+    }
+}
+\end{lstlisting}
+
+\subsection{线性方程组解的梯度反传}\label{appendix:inv-linear-equation-grad}
+考虑关于 $\bm{v}$ 的实线性方程组 $\bm{A}(\bm{x})\bm{v}=\bm{b}(\bm{x})$，
+其中 $\bm{A},\bm{b}$ 非线性依赖于 $\bm{x}$ 为稀疏矩阵/向量，且
+$\nabla_{\bm{x}}\bm{A},\nabla_{\bm{x}}\bm{b}$
+均可计算，则 $\bm{v}$ 也将非线性依赖于 $\bm{x}$，事实上，对方程组作微分可得
+\[
+  (\bm{A}+\nabla_{\bm{x}}\bm{A}\cdot\ud\bm{x})\cdot
+  (\bm{v}+\nabla_{\bm{x}}\bm{v}\cdot\ud\bm{x})
+  =\bm{b}+\nabla_{\bm{x}}\bm{b}\cdot\ud\bm{x}
+\]
+舍弃0阶及2阶项，可得下式对任意 $\ud\bm{x}$ 成立
+\begin{equation}\label{eq:inv-full-differentiation}
+  \nabla_{\bm{x}}\bm{A}\cdot\ud\bm{x}\cdot\bm{v}
+  +\bm{A}\cdot\nabla_{\bm{x}}\bm{v}\cdot\ud\bm{x}
+  =\nabla_{\bm{x}}\bm{b}\cdot\ud\bm{x},
+\end{equation}
+假设某个损失函数 $l(\bm{v})$ 可关于 $\bm{v}$ 求梯度 $\nabla_{\bm{v}}l$，
+需将梯度反传到 $\bm{x}$，即需求解
+$\nabla_{\bm{x}}l=\nabla_{\bm{v}}l\cdot\nabla_{\bm{x}}\bm{v}$。
+我们无需真的计算 $\nabla_{\bm{x}}\bm{v}$ 并存下来(这可能是稠密的)，
+事实上由 Eq.\ref{eq:inv-full-differentiation} 有
+\[
+  \begin{split}
+  & \nabla_{\bm{x}}\bm{v}\cdot\ud\bm{x}
+  = \bm{A}^{-1}\cdot\big(\nabla_{\bm{x}}\bm{b}\cdot\ud\bm{x}-
+  \nabla_{\bm{x}}\bm{A}\cdot\ud\bm{x}\cdot\bm{v}\big),\forall \ud\bm{x}, \\
+  \Rightarrow
+    & \nabla_{\bm{v}}l\cdot\nabla_{\bm{x}}\bm{v}\cdot\ud\bm{x}
+    = (\nabla_{\bm{v}}l\cdot\bm{A}^{-1})\cdot\big(\nabla_{\bm{x}}\bm{b}\cdot\ud\bm{x}-
+  \nabla_{\bm{x}}\bm{A}\cdot\ud\bm{x}\cdot\bm{v}\big),\forall \ud\bm{x}, \\
+  \end{split}
+\]
+因此，为计算 $\nabla_{\bm{v}}l\cdot\nabla_{\bm{x}}\bm{v}$，
+只需提前作一次稀疏矩阵线性方程组求解 $\nabla_{\bm{v}}l\cdot\bm{A}^{-1}$，
+再对 $\ud\bm{x}$ 各位置逐个置为1，其余位置置0，即可得到
+$\nabla_{\bm{x}}l=\nabla_{\bm{v}}l\cdot\nabla_{\bm{x}}\bm{v}$。
+
+对于复数线性方程组情形，也可采用 Wirtinger 导数进行类似讨论。
