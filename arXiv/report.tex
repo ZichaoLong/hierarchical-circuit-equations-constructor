@@ -2,12 +2,23 @@
 % !TEX encoding = UTF-8
 %
 %
-\documentclass[a4paper,12pt]{article}
-\usepackage[T1]{fontenc}
-\usepackage{geometry,anysize,changepage,calc,hyperref,cite,fancyhdr,setspace}
+\documentclass{article}
+
+\usepackage{arxiv}
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{hyperref}       % hyperlinks
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+
+
 \usepackage{amsmath,amssymb,amsthm,listings,xcolor}
 \newtheorem{assumption}{Assumption}
-
+ 
 \colorlet{punct}{red!60!black}
 \definecolor{background}{HTML}{EEEEEE}
 \definecolor{delim}{RGB}{20,105,176}
@@ -40,8 +51,6 @@
       {[}{{{\color{delim}{[}}}}{1}
       {]}{{{\color{delim}{]}}}}{1},
 }
-\renewcommand{\lstlistingname}{Code}
-\renewcommand{\lstlistlistingname}{\lstlistingname List}% List of Listings -> List of Algorithms
 \definecolor{capri}{rgb}{0.0, 0.75, 1.0}
 
 
@@ -51,42 +60,60 @@
 \renewcommand{\listalgorithmcfname}{Algorithm List}
 \renewcommand{\algorithmcfname}{Algorithm}
 \usepackage[numbers,sort,compress]{natbib}
-\usepackage{url,bm,titling,mathrsfs}
+\usepackage{bm,mathrsfs}
 \newcommand{\lookup}{\text{lookup}}
 \newcommand{\net}{\text{net}}
 \newcommand{\device}{\text{device}}
-\newcommand{\enabstractname}{Abstract}
-\newcommand{\cnabstractname}{Abstract}
-\newenvironment{enabstract}{
-  \par\small
-  \noindent\mbox{}\hfill{\bfseries \enabstractname}\hfill\mbox{}\par
-  \vskip 2.5ex}{\par\vskip 2.5ex}
-\newenvironment{cnabstract}{
-  \par\small
-  \noindent\mbox{}\hfill{\bfseries \cnabstractname}\hfill\mbox{}\par
-  \vskip 2.5ex}{\par\vskip 2.5ex}
-% \bibliographystyle{abbrvnat}
-% \setcitestyle{open={(},authoryear,close={)}}
-\bibliographystyle{unsrtnat}
-\listfiles
-\input{initialset.tex}
-\linespread{1.5}
-\newcommand\blfootnote[1]{%
-  \begingroup
-  \renewcommand\thefootnote{}\footnote{#1}%
-  \addtocounter{footnote}{-1}%
-  \endgroup
-}
-% \author{Zichao Long}
-\author{Zichao Long, Lin Li, Lei Han, Xianglong Meng, Chongjun Ding,\\
-Ruiyan Li, Wu Jiang, Fuchen Ding, Jiaqing Yue, Zhichao Li,\\
-Yisheng Hu, Ding Li, $\text{Heng Liao}^\star$}
-\setlength{\droptitle}{-10em}
+
+\newcommand{\vp}{\varphi}
+\newcommand{\al}{\alpha}
+\newcommand{\be}{\beta}
+\newcommand{\ti}{\tilde}
+\newcommand{\ve}{\varepsilon}
+\newcommand{\de}{\delta}
+\newcommand{\na}{\nabla}
+\newcommand{\pd}{\partial}
+\newcommand{\ud}{\mathrm{d}}
+\newcommand{\mr}{\mathbb{R}}
+\newcommand{\ms}{\mathbb{S}}
+\newcommand{\mz}{\mathbb{Z}}
+\newcommand{\mn}{\mathbb{N}}
+\newcommand{\mc}{\mathbb{C}}
+\newcommand{\one}{\textbf{1}}
+\DeclareMathOperator*{\st}{s.t.}
+
 \title{Computational Graph Representation of Equations System Constructors in Hierarchical Circuit Simulation}
-\date{}
+\author{Zichao Long
+\And
+Lin Li
+\And
+Lei Han
+\And
+Xianglong Meng
+\And
+Chongjun Ding
+\And
+Ruiyan Li
+\And
+Wu Jiang
+\And
+Fuchen Ding
+\And
+Jiaqing Yue
+\And
+Zhichao Li
+\And
+Yisheng Hu
+\And
+Ding Li
+\And
+Heng Liao
+\thanks{Corresponding author}
+\AND
+\normalfont{HiSilicon}
+}
 \begin{document}
 \maketitle
-\vspace{-5.7em}
 \begin{abstract}
   Equations system constructors of hierarchical circuits play a central role in
   device modeling, nonlinear equations solving, and circuit design automation.
@@ -116,11 +143,10 @@ Yisheng Hu, Ding Li, $\text{Heng Liao}^\star$}
   that the proposed method supports circuit simulation and design and
   particularly subcircuit modeling with improved efficiency, simplicity,
   and decoupling compared to existing techniques.
-  \\
-  {\bf{Keywords}}: hierarchical circuit simulation, SPICE, computational graph,
-  circuit static parameters, runtime variables, automatic differentiation,
-  circuit behavior model, MOS sizing
-\blfootnote{$\text{Corresponding author}^\star$}
+  % \\
+  % {\bf{Keywords}}: hierarchical circuit simulation, SPICE, computational graph,
+  % circuit static parameters, runtime variables, automatic differentiation,
+  % circuit behavior model, MOS sizing
 \end{abstract}
 
 \newpage
@@ -141,6 +167,7 @@ In this paper, the static parameters of the circuit are processed as runtime var
 I would like to thank my colleagues at HiSilicon. It's been both a pleasure and an honor to work with them. This work has been also supported by many EDA and HDL experts, including Waisum Wang, Jiewen Fan, Zuochang Ye, Yang Lu, Shangxia Fang, Guoyong Shi, and Yu Ji. Special thanks go to Zhenya Zhou, Jiawei Zhuang, Long Wang, and Yuwei Fan for their kind help.
 
 \addcontentsline{toc}{section}{References}
+\bibliographystyle{unsrtnat}
 \bibliography{ref}
 \input{sec-appendix}
 \end{document}
