@@ -210,7 +210,7 @@ JSON 格式的网表：也可理解为一种硬件描述语言(HDL)[[1]](#pecheu
 
 *搞清楚这种依赖关系，就可以定义更大一类器件，比如[由尺寸决定阻值的电阻器](#example-size-dependent-resistor)。典型的 MOS 管模型如 [BSIM Model](https://bsim.berkeley.edu/) 中，MOS 管被等效为一个子电路(参考下图 BSIM4 模型[[3]](#liu2001mosfet)[[4]](#spectremod))，其内部参数状态依赖于 MOS 管本身的尺寸等信息及四端电压，[在这里也进行了类似的建模分解](#example-mos-modeling)。*
 
-  ![BSIM4 equivalent subckt](./fig/bsim4-equivalent-circuit.png)
+  ![BSIM4 equivalent subckt](fig/bsim4-equivalent-circuit.png)
 
 ---
 ### <span id=simulation-entry>仿真入口</span>
@@ -494,7 +494,7 @@ ID = intrinsicparams[1]
 
 ### <span id=mos-small-signal-template>`MosSmallSignalTemplate` 类型子电路</span>
 
-![小信号等效分解](./fig/mos-small-signal-model-2.png)
+![小信号等效分解](fig/mos-small-signal-model-2.png)
 
 
 ```json
